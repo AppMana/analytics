@@ -789,6 +789,8 @@ defmodule PlausibleWeb.SiteController do
 
       Plausible.Purge.delete_imported_stats!(site)
 
+      Plausible.Imported.delete_imports_for_site(site)
+
       site
       |> Plausible.Site.remove_imported_data()
       |> Repo.update!()
