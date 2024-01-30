@@ -27,11 +27,12 @@ defmodule Plausible.Shield.IPRule do
   end
 
   defp disallow_netmask(changeset, field) do
-    %Postgrex.INET{netmask: netmask} = get_field(changeset, field)
-    if netmask != 32 do
-      add_error(changeset, field, "netmask unsupported")
-    else
-      changeset
+    case get_field(changeset, field) do
+      %Postgrex.INET{netmask: netmask} when netmask != 32 ->
+        add_error(changeset, field, "netmask unsupported")
+
+      _ ->
+        changeset
     end
   end
 end
