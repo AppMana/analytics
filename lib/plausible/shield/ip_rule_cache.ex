@@ -36,7 +36,9 @@ defmodule Plausible.Shield.IPRuleCache do
 
   @impl true
   def get_from_source({domain, address}) do
-    query = base_db_query() |> where([rule, site], rule.ip_address == ^address and site.domain == ^domain)
+    query =
+      base_db_query()
+      |> where([rule, site], rule.ip_address == ^address and site.domain == ^domain)
 
     case Plausible.Repo.one(query) do
       {_, _, rule} -> %IPRule{rule | from_cache?: false}
@@ -51,8 +53,10 @@ defmodule Plausible.Shield.IPRuleCache do
         [{{domain, to_string(object.ip_address)}, object} | acc]
 
       {domain, domain_changed_from, object}, acc ->
-        [{{domain, to_string(object.ip_address)}, object}, 
-          {{domain_changed_from, to_string(object.ip_address)}, object} | acc]
+        [
+          {{domain, to_string(object.ip_address)}, object},
+          {{domain_changed_from, to_string(object.ip_address)}, object} | acc
+        ]
     end)
   end
 end

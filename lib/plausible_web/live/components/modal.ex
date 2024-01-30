@@ -117,6 +117,7 @@ defmodule PlausibleWeb.Live.Components.Modal do
 
   attr :id, :any, required: true
   attr :class, :string, default: ""
+  attr :close_callback, :any, default: nil
   slot :inner_block, required: true
 
   def render(assigns) do
