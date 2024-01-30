@@ -80,12 +80,17 @@ defmodule PlausibleWeb.Live.Shields do
           placeholder="e.g. 192.168.127.12"
         />
 
-        <p class="text-sm mt-2 text-gray-500 dark:text-gray-200 mb-4">
-          Your current IP address is: <span class="font-mono"><%= @remote_ip %></span>
-          <br />
-          <.styled_link phx-click="prefill-own-ip-rule">Click here</.styled_link>
-          to block your own traffic, or enter a custom address.
-        </p>
+        <div class="mt-4">
+          <p
+            :if={not ip_rule_present?(@ip_rules, @remote_ip)}
+            class="text-sm text-gray-500 dark:text-gray-200 mb-4"
+          >
+            Your current IP address is: <span class="font-mono"><%= @remote_ip %></span>
+            <br />
+            <.styled_link phx-click="prefill-own-ip-rule">Click here</.styled_link>
+            to block your own traffic, or enter a custom address.
+          </p>
+        </div>
 
         <.input
           field={f[:description]}
@@ -143,7 +148,7 @@ defmodule PlausibleWeb.Live.Shields do
 
                   <span
                     :if={to_string(rule.ip_address) == @remote_ip}
-                    class="inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-700"
+                    class="inline-flex items-center gap-x-1.5 rounded-md px-2 py-1 text-xs font-medium text-gray-700 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700"
                   >
                     <svg class="h-1.5 w-1.5 fill-green-400" viewBox="0 0 6 6" aria-hidden="true">
                       <circle cx="3" cy="3" r="3" />
@@ -226,5 +231,9 @@ defmodule PlausibleWeb.Live.Shields do
     %Shield.IPRule{}
     |> Shield.IPRule.changeset(%{})
     |> to_form()
+  end
+
+  defp ip_rule_present?(rules, ip) do
+    not is_nil(Enum.find(rules, &(to_string(&1.ip_address) == ip)))
   end
 end
