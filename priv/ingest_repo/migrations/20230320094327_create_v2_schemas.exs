@@ -12,7 +12,7 @@ defmodule Plausible.IngestRepo.Migrations.CreateV2Schemas do
 
   use Plausible.DataMigration, dir: "NumericIDs"
 
-  @cluster? false
+  @cluster? true
   @settings "SETTINGS index_granularity = 8192"
 
   def up do
